@@ -4,7 +4,6 @@ using Common.Logging;
 using LaunchDarkly.Client;
 using LaunchDarkly.Common;
 using Newtonsoft.Json;
-using Xamarin.Essentials;
 
 namespace LaunchDarkly.Xamarin
 {
@@ -27,9 +26,7 @@ namespace LaunchDarkly.Xamarin
             }
             catch (System.Exception ex)
             {
-                Log.ErrorFormat("Couldn't set preferences on mobile device: '{0}'",
-                    ex,
-                    Util.ExceptionMessage(ex));
+                Log.ErrorFormat("Couldn't set preferences on mobile device: '{0}'", ex, ex.Message);
             }
         }
 
@@ -45,9 +42,7 @@ namespace LaunchDarkly.Xamarin
             }
             catch (Exception ex)
             {
-                Log.ErrorFormat("Couldn't get preferences on mobile device: '{0}'",
-                    ex,
-                    Util.ExceptionMessage(ex));
+                Log.ErrorFormat("Couldn't get preferences on mobile device: '{0}'",ex, ex.Message);
             }
 
             return new Dictionary<string, FeatureFlag>();

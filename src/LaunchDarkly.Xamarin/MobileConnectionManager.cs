@@ -1,5 +1,5 @@
 ﻿using System;
-using Xamarin.Essentials;
+using Plugin.Connectivity;
 
 namespace LaunchDarkly.Xamarin
 {
@@ -9,25 +9,14 @@ namespace LaunchDarkly.Xamarin
 
         internal MobileConnectionManager()
         {
-            isConnected = Connectivity.NetworkAccess == NetworkAccess.Internet;
-            Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+            CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
         }
 
-        bool isConnected;
-        bool IConnectionManager.IsConnected
-        {
-            get { return isConnected; }
-            set
-            {
-                isConnected = value;
-            }
-        }
+        public bool IsConnected => CrossConnectivity.Current.IsConnected;
 
-
-        void Connectivity_ConnectivityChanged(ConnectivityChangedEventArgs e)
+        void Current_ConnectivityChanged(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
         {
-            isConnected = Connectivity.NetworkAccess == NetworkAccess.Internet;
-            ConnectionChanged?.Invoke(isConnected);
+            ConnectionChanged?.Invoke(IsConnected);
         }
     }
 }

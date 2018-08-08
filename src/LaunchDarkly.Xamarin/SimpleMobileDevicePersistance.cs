@@ -1,18 +1,26 @@
-﻿using System;
-using Xamarin.Essentials;
+﻿using Plugin.Settings;
+using Plugin.Settings.Abstractions;
 
 namespace LaunchDarkly.Xamarin
 {
     internal class SimpleMobileDevicePersistance : ISimplePersistance
     {
+        static ISettings AppSettings
+        {
+            get
+            {
+                return CrossSettings.Current;
+            }
+        }
+
         public void Save(string key, string value)
         {
-            Preferences.Set(key, value);
+            AppSettings.AddOrUpdateValue(key, value);
         }
 
         public string GetValue(string key)
         {
-            return Preferences.Get(key, null);
+            return AppSettings.GetValueOrDefault(key, null);
         }
     }
 }
