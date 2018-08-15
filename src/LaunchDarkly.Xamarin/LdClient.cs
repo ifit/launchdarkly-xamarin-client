@@ -212,30 +212,27 @@ namespace LaunchDarkly.Xamarin
                 Log.InfoFormat("The mobile client connection changed online to {0}",
                                connectionManager.IsConnected);
             }
-            online = connectionManager.IsConnected;
         }
 
-        bool online;
         /// <see cref="ILdMobileClient.Online"/>
         public bool Online
         {
             get
             {
-                return online;
+                return connectionManager?.IsConnected ?? false;
             }
             set
             {
-                SetOnlineAsync(value).Wait();
+                Task.Run(() => SetOnlineAsync(value));
             }
         }
 
         public async Task SetOnlineAsync(bool value)
         {
             await connectionLock.WaitAsync();
-            online = value;
             try
             {
-                if (online)
+                if (Online)
                 {
                     await RestartUpdateProcessorAsync();
                 }
@@ -410,7 +407,7 @@ namespace LaunchDarkly.Xamarin
         /// <see cref="ILdCommonClient.IsOffline()"/>
         public bool IsOffline()
         {
-            return !online;
+            return !Online;
         }
 
         /// <see cref="ILdCommonClient.Flush()"/>
