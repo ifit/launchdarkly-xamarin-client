@@ -184,8 +184,9 @@ namespace LaunchDarkly.Xamarin
 
         static void CreateInstance(Configuration configuration, User user)
         {
-            if (Instance != null)
-                throw new Exception("LdClient instance already exists.");
+			if (Instance != null) {
+				throw new AlreadyInitializedException ("LdClient instance already exists.");
+			}
 
             Instance = new LdClient(configuration, user);
             Log.InfoFormat("Initialized LaunchDarkly Client {0}",
@@ -620,5 +621,12 @@ namespace LaunchDarkly.Xamarin
                 await pollingProcessor.PingAndWait();
             }
         }
+
+		public class AlreadyInitializedException : Exception
+		{
+			public AlreadyInitializedException (string message) : base (message)
+			{
+			}
+		}
     }
 }
